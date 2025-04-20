@@ -104,8 +104,10 @@ export default function ImageComponent() {
   };
 
   useEffect(() => {
-    user && isLoaded === true && fetchCredits();
-  }, [user]);
+    if (user && isLoaded) {
+      fetchCredits();
+    }
+  }, [user, isLoaded]);
 
   return (
     <section className="relative p-4 min-h-screen max-w-screen overflow-x-hidden flex flex-col justify-center items-center bg-gradient-to-b from-yellow-50 to-transparent">
