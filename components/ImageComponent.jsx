@@ -166,13 +166,22 @@ export default function ImageComponent() {
       {creditsLoaded && credit > 0 && (
         <div className="w-full flex justify-center items-center gap-x-4">
           {imageSrc && (
-            <Button
-              className="flex gap-x-2 justify-center items-center cursor-pointer my-4"
-              onClick={handleDownload}
-            >
-              Download
-              <Download />
-            </Button>
+            <div className="flex gap-x-4 items-center">
+              <Button
+                className="flex gap-x-2 justify-center items-center cursor-pointer my-4"
+                onClick={handleDownload}
+              >
+                Download
+                <Download />
+              </Button>
+              <Button
+                variant={"outline"}
+                className="flex gap-x-2 cursor-pointer"
+                onClick={reload}
+              >
+                Generate More 😊
+              </Button>
+            </div>
           )}
           {!imageSrc && !error && (
             <Button
