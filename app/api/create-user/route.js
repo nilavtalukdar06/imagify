@@ -5,18 +5,30 @@ import userModel from "@/utils/models/user.model";
 export async function POST(request) {
   const { name, email } = await request.json();
   try {
-    await userModel.insertOne({
-      name,
-      email,
-    });
-    return NextResponse.json(
-      {
-        message: "user created successfully",
-      },
-      {
-        status: 201,
-      }
-    );
+    const result = await userModel.findOne({ email: email });
+    if (!result) {
+      await userModel.create({
+        name,
+        email,
+      });
+      return NextResponse.json(
+        {
+          message: "user created successfully",
+        },
+        {
+          status: 201,
+        }
+      );
+    } else {
+      return NextResponse.json(
+        {
+          message: "user is already present",
+        },
+        {
+          status: 201,
+        }
+      );
+    }
   } catch (error) {
     console.error(`error creating user, error: ${error}`);
     return NextResponse.json(
