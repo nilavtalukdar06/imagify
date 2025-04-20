@@ -8,8 +8,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
       default: "user",
     },
-    email: { type: String, unique: true },
-    razorpayId: { type: String, unique: true },
+    email: { type: String, unique: true, required: true },
     token: {
       type: Number,
       required: true,

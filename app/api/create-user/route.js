@@ -4,6 +4,12 @@ import userModel from "@/utils/models/user.model";
 
 export async function POST(request) {
   const { name, email } = await request.json();
+  if (!email || !name) {
+    return NextResponse.json(
+      { message: "Name and email are required" },
+      { status: 400 }
+    );
+  }
   try {
     const result = await userModel.findOne({ email: email });
     if (!result) {
@@ -25,7 +31,7 @@ export async function POST(request) {
           message: "user is already present",
         },
         {
-          status: 201,
+          status: 200,
         }
       );
     }
