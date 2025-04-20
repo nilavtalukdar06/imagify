@@ -5,14 +5,16 @@ import Image from "next/image";
 import Loader from "./Loader";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "./ui/textarea";
+import { useUser } from "@clerk/nextjs";
 
 export default function ImageComponent() {
   const [imageSrc, setImageSrc] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [credit, setCredit] = useState(0);
   const [value, setValue] = useState("");
-
+  const { user } = useUser();
   const fetchData = async () => {
     try {
       if (!value) {
@@ -27,13 +29,13 @@ export default function ImageComponent() {
         method: "POST",
         body: JSON.stringify({
           prompt: value,
+          email: user?.primaryEmailAddress?.emailAddress,
         }),
         headers: {
           "Content-type": "application/json",
         },
       });
       const data = await response.json();
-      console.log(data);
       const image = data?.result[0]?.image;
       const srcImage = `data:image/png;base64,${image}`;
       setImageSrc(srcImage);
