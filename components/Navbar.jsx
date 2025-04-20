@@ -55,14 +55,14 @@ export default function Navbar({ token, isLoading }) {
       >
         <Image src="/logo.svg" height={50} width={100} alt="logo" />
       </button>
-      <div className="flex items-center justify-center gap-x-6">
+      <div className="flex items-center justify-center gap-x-4 sm:gap-x-6">
         <span className="px-3 py-2 rounded-full bg-[#D7EBFF] text-sm flex gap-x-2">
           <Image src="/vector.svg" alt="vector" height={15} width={15} />
           {isLoading
             ? "Loading..."
             : token !== null
             ? `Credits left: ${token}`
-            : "Credits not found ☠️"}
+            : "Not found ☠️"}
         </span>
         {user ? (
           <UserButton />
