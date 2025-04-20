@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import Image from "next/image";
+import Navbar from "./Navbar";
 import Loader from "./Loader";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "./ui/textarea";
@@ -39,6 +40,8 @@ export default function ImageComponent() {
       const image = data?.result[0]?.image;
       const srcImage = `data:image/png;base64,${image}`;
       setImageSrc(srcImage);
+      setCredit(data.token);
+      console.log(credit);
     } catch (error) {
       setError(true);
       setImageSrc("");
@@ -59,12 +62,41 @@ export default function ImageComponent() {
     window.location.reload();
   };
 
+  const fetchCredits = async () => {
+    try {
+      const response = await fetch("/api/get-credit-count", {
+        method: "POST",
+        body: JSON.stringify({
+          email: user?.primaryEmailAddress?.emailAddress, // <-- fix here
+        }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Error fetching credit counts");
+      }
+      const data = await response.json();
+      console.log(data);
+      setCredit(data.credit);
+      console.log(credit);
+    } catch (error) {
+      console.error(error);
+      setCredit(NaN);
+    }
+  };
+
   const reload = () => {
     window.location.reload();
   };
 
+  useEffect(() => {
+    user && fetchCredits();
+  }, [user]);
+
   return (
-    <section>
+    <section className="relative p-4 min-h-screen max-w-screen overflow-x-hidden flex flex-col justify-center items-center bg-gradient-to-b from-yellow-50 to-transparent">
+      <Navbar token={credit} />
       {!error && (
         <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
           {imageSrc === "" ? "AI Image Generator" : "Generated Image"}
@@ -73,7 +105,7 @@ export default function ImageComponent() {
 
       {!error && !imageSrc && (
         <Textarea
-          className="my-4 sm:my-8 bg-transparent"
+          className="my-4 sm:my-8 bg-transparent max-w-xl"
           placeholder="Write your idea to generate image"
           value={value}
           onChange={(e) => setValue(e.target.value)}

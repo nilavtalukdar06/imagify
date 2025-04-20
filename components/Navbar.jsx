@@ -5,7 +5,7 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 
-export default function Navbar() {
+export default function Navbar({ token }) {
   const reload = () => {
     window.location.reload();
   };
@@ -58,7 +58,7 @@ export default function Navbar() {
       <div className="flex items-center justify-center gap-x-6">
         <span className="px-3 py-2 rounded-full bg-[#D7EBFF] text-sm flex gap-x-2">
           <Image src="/vector.svg" alt="vector" height={15} width={15} />
-          Credits left: 3
+          Credits left: {token}
         </span>
         {user ? (
           <UserButton />
