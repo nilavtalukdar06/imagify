@@ -61,7 +61,7 @@ export default function Navbar({ token, isLoading }) {
           {isLoading
             ? "Loading..."
             : token !== null
-            ? `Credits left ${token}`
+            ? `Credits left: ${token}`
             : "Credits not found ☠️"}
         </span>
         {user ? (

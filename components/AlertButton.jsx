@@ -31,7 +31,7 @@ export function AlertButton() {
       const data = await response.json();
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // This will work if env is set correctly
         amount: 20 * 100,
         currency: "INR",
         name: "Imagify",
@@ -39,10 +39,11 @@ export function AlertButton() {
         order_id: data.orderId,
         handler: function (response) {
           console.log("Payment Successful", response);
+          window.location.reload(); // Refresh the page after successful payment
         },
         prefill: {
           name: "Imagify",
-          email: "Imagify@gmail.com",
+          email: user?.primaryEmailAddress?.emailAddress || "Imagify@gmail.com",
         },
         theme: {
           color: "#3399c",
@@ -54,7 +55,6 @@ export function AlertButton() {
       console.error("Payment Failed", error);
     } finally {
       setIsProcessing(false);
-      window.location.reload();
     }
   };
 

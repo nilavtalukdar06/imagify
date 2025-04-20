@@ -92,6 +92,8 @@ export default function ImageComponent() {
     } catch (error) {
       console.error(error);
       setCredit(null);
+      // Refresh the page if fetching credits fails
+      window.location.reload();
     } finally {
       setCreditLoading(false);
     }
@@ -138,8 +140,7 @@ export default function ImageComponent() {
           Couldn't generate image!
         </div>
       ) : (
-        imageSrc &&
-        credit !== 0 && (
+        imageSrc && (
           <Image
             src={imageSrc}
             alt="Image"
