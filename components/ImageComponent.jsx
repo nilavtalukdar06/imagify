@@ -18,7 +18,7 @@ export default function ImageComponent() {
   const [creditLoading, setCreditLoading] = useState(false);
   const [credit, setCredit] = useState(0);
   const [value, setValue] = useState("");
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const fetchData = async () => {
     try {
       if (!value) {
@@ -102,7 +102,7 @@ export default function ImageComponent() {
   };
 
   useEffect(() => {
-    user && fetchCredits();
+    user && isLoaded === true && fetchCredits();
   }, [user]);
 
   return (

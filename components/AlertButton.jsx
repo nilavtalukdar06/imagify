@@ -12,12 +12,55 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@clerk/nextjs";
+import Script from "next/script";
+import { useState } from "react";
 
 export function AlertButton() {
   const { user } = useUser();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handlePayment = async () => {
+    setIsProcessing(true);
+    try {
+      const response = await fetch("/api/create-order", {
+        method: "POST",
+        body: JSON.stringify({
+          email: user?.primaryEmailAddress?.emailAddress,
+        }),
+      });
+      const data = await response.json();
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: 20 * 100,
+        currency: "INR",
+        name: "Imagify",
+        description: "Credit refill",
+        order_id: data.orderId,
+        handler: function (response) {
+          console.log("Payment Successful", response);
+        },
+        prefill: {
+          name: "Imagify",
+          email: "Imagify@gmail.com",
+        },
+        theme: {
+          color: "#3399c",
+        },
+      };
+      const rzp1 = new window.Razorpay(options);
+      rzp1.open();
+    } catch (error) {
+      console.error("Payment Failed", error);
+    } finally {
+      setIsProcessing(false);
+      window.location.reload();
+    }
+  };
 
   return (
     <AlertDialog>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <AlertDialogTrigger asChild>
         <Button variant="outline" className="cursor-pointer">
           Buy Credits 🤑
@@ -34,8 +77,12 @@ export function AlertButton() {
           <AlertDialogCancel className="cursor-pointer">
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white cursor-pointer">
-            Pay 20&#8377;
+          <AlertDialogAction
+            className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white cursor-pointer"
+            disabled={isProcessing}
+            onClick={handlePayment}
+          >
+            {isProcessing ? "Processing..." : "Pay Now"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

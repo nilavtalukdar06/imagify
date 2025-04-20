@@ -21,7 +21,7 @@ export async function POST(request) {
   }
   try {
     const order = await razorpay.orders.create({
-      amount: 1 * 20,
+      amount: 20 * 100,
       currency: "INR",
       receipt: "reciept_" + Math.random().toString(36).substring(7),
     });
