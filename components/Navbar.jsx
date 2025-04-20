@@ -60,7 +60,7 @@ export default function Navbar({ token, isLoading }) {
           <Image src="/vector.svg" alt="vector" height={15} width={15} />
           {isLoading
             ? "Loading..."
-            : !token.isNaN
+            : token
             ? `Credits left ${token}`
             : "Credits not found ☠️"}
         </span>

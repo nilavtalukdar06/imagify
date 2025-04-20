@@ -71,7 +71,7 @@ export default function ImageComponent() {
       setCreditLoading(true);
       const email = user?.primaryEmailAddress?.emailAddress;
       if (!email) {
-        setCredit(NaN);
+        setCredit(null);
         setCreditLoading(false);
         return;
       }
@@ -91,7 +91,7 @@ export default function ImageComponent() {
       setCredit(data.credit);
     } catch (error) {
       console.error(error);
-      setCredit(NaN);
+      setCredit(null);
     } finally {
       setCreditLoading(false);
     }
