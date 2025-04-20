@@ -75,14 +75,16 @@ export default function ImageComponent() {
             <Download />
           </Button>
         )}
-        <Button
-          variant="outline"
-          className="cursor-pointer my-4"
-          onClick={fetchData}
-          disabled={disabled}
-        >
-          {disabled ? "Generating..." : "Generate Image 💫"}
-        </Button>
+        {!imageSrc && (
+          <Button
+            variant="outline"
+            className="cursor-pointer my-4"
+            onClick={fetchData}
+            disabled={disabled}
+          >
+            {disabled ? "Generating..." : "Generate Image 💫"}
+          </Button>
+        )}
       </div>
     </section>
   );
