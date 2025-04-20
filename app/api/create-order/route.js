@@ -1,6 +1,7 @@
 import userModel from "@/utils/models/user.model";
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
+import connection from "@/utils/db/mongodb";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,

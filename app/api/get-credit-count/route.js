@@ -1,5 +1,6 @@
 import userModel from "@/utils/models/user.model";
 import { NextResponse } from "next/server";
+import connection from "@/utils/db/mongodb";
 
 export async function POST(request) {
   const data = await request.json();

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI, Modality } from "@google/genai";
 import userModel from "@/utils/models/user.model";
+import connection from "@/utils/db/mongodb";
 
 export async function POST(request) {
   const text = await request.json();
