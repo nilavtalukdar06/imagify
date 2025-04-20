@@ -15,8 +15,8 @@ export default function ImageComponent() {
     try {
       setLoading(true);
       setDisabled(true);
-      setError(false); // Reset error state
-      setImageSrc(""); // Optionally reset image
+      setError(false);
+      setImageSrc("");
       const response = await fetch("/api/generate-image", { method: "GET" });
       const data = await response.json();
       const image = data?.result[0]?.image;
@@ -24,7 +24,7 @@ export default function ImageComponent() {
       setImageSrc(srcImage);
     } catch (error) {
       setError(true);
-      setImageSrc(""); // Optionally clear image on error
+      setImageSrc("");
       console.error(`Failed to generate image, error: ${error}`);
     } finally {
       setLoading(false);
@@ -41,18 +41,25 @@ export default function ImageComponent() {
     document.body.removeChild(link);
   };
 
+  const reload = () => {
+    window.location.reload();
+  };
+
   return (
     <section>
-      <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
-        {imageSrc === "" ? "AI Image Generator" : "Generated Image"}
-      </h1>
+      {!error && (
+        <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
+          {imageSrc === "" ? "AI Image Generator" : "Generated Image"}
+        </h1>
+      )}
+
       {loading ? (
         <div className="w-full flex justify-center items-center">
           <Loader />
         </div>
       ) : error ? (
         <div className="text-4xl font-bold bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-transparent bg-clip-text">
-          Couldn't generate image 🥲
+          Couldn't generate image!
         </div>
       ) : (
         imageSrc && (
@@ -68,14 +75,14 @@ export default function ImageComponent() {
       <div className="w-full flex justify-center items-center gap-x-4">
         {imageSrc && (
           <Button
-            className="flex gap-x-2 justify-center items-center cursor-pointer"
+            className="flex gap-x-2 justify-center items-center cursor-pointer my-4"
             onClick={handleDownload}
           >
             Download
             <Download />
           </Button>
         )}
-        {!imageSrc && (
+        {!imageSrc && !error && (
           <Button
             variant="outline"
             className="cursor-pointer my-4"
@@ -83,6 +90,15 @@ export default function ImageComponent() {
             disabled={disabled}
           >
             {disabled ? "Generating..." : "Generate Image 💫"}
+          </Button>
+        )}
+        {error && (
+          <Button
+            className="my-4 cursor-pointer"
+            variant="destructive"
+            onClick={reload}
+          >
+            Try Again 🥲
           </Button>
         )}
       </div>
