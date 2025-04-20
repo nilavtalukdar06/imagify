@@ -12,11 +12,12 @@ export async function POST(request) {
   async function main() {
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-      const contents = text.prompt;
+      const contents = text.prompt.trim();
       const response = await ai.models.generateContent({
         model: "gemini-2.0-flash-exp-image-generation",
         contents: contents,
         config: {
+          aspectRatio: "1:1",
           responseModalities: [Modality.TEXT, Modality.IMAGE],
         },
       });

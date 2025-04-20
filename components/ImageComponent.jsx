@@ -19,8 +19,17 @@ export default function ImageComponent() {
       setDisabled(true);
       setError(false);
       setImageSrc("");
-      const response = await fetch("/api/generate-image", { method: "GET" });
+      const response = await fetch("/api/generate-image", {
+        method: "POST",
+        body: JSON.stringify({
+          prompt: value,
+        }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
       const data = await response.json();
+      console.log(data);
       const image = data?.result[0]?.image;
       const srcImage = `data:image/png;base64,${image}`;
       setImageSrc(srcImage);
@@ -41,6 +50,7 @@ export default function ImageComponent() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    window.location.reload();
   };
 
   const reload = () => {
