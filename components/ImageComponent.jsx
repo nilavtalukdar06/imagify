@@ -4,6 +4,7 @@ import { Download } from "lucide-react";
 import Image from "next/image";
 import Navbar from "./Navbar";
 import Loader from "./Loader";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "./ui/textarea";
 import { useUser } from "@clerk/nextjs";
