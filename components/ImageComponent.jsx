@@ -108,7 +108,12 @@ export default function ImageComponent() {
   return (
     <section className="relative p-4 min-h-screen max-w-screen overflow-x-hidden flex flex-col justify-center items-center bg-gradient-to-b from-yellow-50 to-transparent">
       <Navbar token={credit} isLoading={creditLoading} />
-      {!error && (
+      {!error && credit === 0 && (
+        <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
+          Buy some credits for more images
+        </h1>
+      )}
+      {!error && credit !== 0 && (
         <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
           {imageSrc === "" ? "AI Image Generator" : "Generated Image"}
         </h1>
@@ -133,7 +138,8 @@ export default function ImageComponent() {
           Couldn't generate image!
         </div>
       ) : (
-        imageSrc && (
+        imageSrc &&
+        credit !== 0 && (
           <Image
             src={imageSrc}
             alt="Image"
@@ -175,7 +181,11 @@ export default function ImageComponent() {
           )}
         </div>
       )}
-      {credit === 0 && <AlertButton />}
+      {credit === 0 && (
+        <div className="my-4">
+          <AlertButton />
+        </div>
+      )}
     </section>
   );
 }
