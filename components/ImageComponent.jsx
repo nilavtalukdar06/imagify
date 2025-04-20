@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Download } from "lucide-react";
 import Image from "next/image";
 import Loader from "./Loader";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,15 @@ export default function ImageComponent() {
     }
   };
 
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = imageSrc;
+    link.download = "downloaded-image.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section>
       <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
@@ -55,7 +65,16 @@ export default function ImageComponent() {
           />
         )
       )}
-      <div className="w-full flex justify-center items-center">
+      <div className="w-full flex justify-center items-center gap-x-4">
+        {imageSrc && (
+          <Button
+            className="flex gap-x-2 justify-center items-center cursor-pointer"
+            onClick={handleDownload}
+          >
+            Download
+            <Download />
+          </Button>
+        )}
         <Button
           variant="outline"
           className="cursor-pointer my-4"
