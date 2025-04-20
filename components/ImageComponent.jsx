@@ -15,6 +15,10 @@ export default function ImageComponent() {
 
   const fetchData = async () => {
     try {
+      if (!value) {
+        alert("Enter a prompt to continue");
+        return;
+      }
       setLoading(true);
       setDisabled(true);
       setError(false);
