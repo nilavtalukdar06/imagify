@@ -68,10 +68,16 @@ export default function ImageComponent() {
   const fetchCredits = async () => {
     try {
       setCreditLoading(true);
+      const email = user?.primaryEmailAddress?.emailAddress;
+      if (!email) {
+        setCredit(NaN);
+        setCreditLoading(false);
+        return;
+      }
       const response = await fetch("/api/get-credit-count", {
         method: "POST",
         body: JSON.stringify({
-          email: user?.primaryEmailAddress?.emailAddress, // <-- fix here
+          email,
         }),
         headers: {
           "Content-type": "application/json",
@@ -107,7 +113,7 @@ export default function ImageComponent() {
         </h1>
       )}
 
-      {!error && !imageSrc && (
+      {!error && !imageSrc && credit !== 0 && (
         <Textarea
           className="my-4 sm:my-8 bg-white max-w-xl"
           placeholder="Write your idea to generate image"
@@ -136,36 +142,41 @@ export default function ImageComponent() {
           />
         )
       )}
-      <div className="w-full flex justify-center items-center gap-x-4">
-        {imageSrc && (
-          <Button
-            className="flex gap-x-2 justify-center items-center cursor-pointer my-4"
-            onClick={handleDownload}
-          >
-            Download
-            <Download />
-          </Button>
-        )}
-        {!imageSrc && !error && (
-          <Button
-            variant="outline"
-            className="cursor-pointer my-4"
-            onClick={fetchData}
-            disabled={disabled}
-          >
-            {disabled ? "Generating..." : "Generate Image 💫"}
-          </Button>
-        )}
-        {error && (
-          <Button
-            className="my-4 cursor-pointer"
-            variant="destructive"
-            onClick={reload}
-          >
-            Try Again 🥲
-          </Button>
-        )}
-      </div>
+      {credit !== 0 && (
+        <div className="w-full flex justify-center items-center gap-x-4">
+          {imageSrc && (
+            <Button
+              className="flex gap-x-2 justify-center items-center cursor-pointer my-4"
+              onClick={handleDownload}
+            >
+              Download
+              <Download />
+            </Button>
+          )}
+          {!imageSrc && !error && (
+            <Button
+              variant="outline"
+              className="cursor-pointer my-4"
+              onClick={fetchData}
+              disabled={disabled}
+            >
+              {disabled ? "Generating..." : "Generate Image 💫"}
+            </Button>
+          )}
+          {error && (
+            <Button
+              className="my-4 cursor-pointer"
+              variant="destructive"
+              onClick={reload}
+            >
+              Try Again 🥲
+            </Button>
+          )}
+        </div>
+      )}
+      {credit === 0 && (
+        <Button className="my-4 cursor-pointer">Buy Credits</Button>
+      )}
     </section>
   );
 }

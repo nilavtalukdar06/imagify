@@ -17,9 +17,9 @@ export async function POST(request) {
   if (!user) {
     return NextResponse.json(
       {
-        message: "error fetching user info",
+        message: "User not found",
       },
-      { status: 500 }
+      { status: 404 }
     );
   }
 
