@@ -13,6 +13,7 @@ export default function ImageComponent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [creditLoading, setCreditLoading] = useState(false);
   const [credit, setCredit] = useState(0);
   const [value, setValue] = useState("");
   const { user } = useUser();
@@ -41,10 +42,11 @@ export default function ImageComponent() {
       const srcImage = `data:image/png;base64,${image}`;
       setImageSrc(srcImage);
       setCredit(data.token);
-      console.log(credit);
+      toast.success("Image Generated");
     } catch (error) {
       setError(true);
       setImageSrc("");
+      toast.error("Failed to generate image");
       console.error(`Failed to generate image, error: ${error}`);
     } finally {
       setLoading(false);
@@ -64,6 +66,7 @@ export default function ImageComponent() {
 
   const fetchCredits = async () => {
     try {
+      setCreditLoading(true);
       const response = await fetch("/api/get-credit-count", {
         method: "POST",
         body: JSON.stringify({
@@ -77,12 +80,12 @@ export default function ImageComponent() {
         throw new Error("Error fetching credit counts");
       }
       const data = await response.json();
-      console.log(data);
       setCredit(data.credit);
-      console.log(credit);
     } catch (error) {
       console.error(error);
       setCredit(NaN);
+    } finally {
+      setCreditLoading(false);
     }
   };
 
@@ -96,7 +99,7 @@ export default function ImageComponent() {
 
   return (
     <section className="relative p-4 min-h-screen max-w-screen overflow-x-hidden flex flex-col justify-center items-center bg-gradient-to-b from-yellow-50 to-transparent">
-      <Navbar token={credit} />
+      <Navbar token={credit} isLoading={creditLoading} />
       {!error && (
         <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
           {imageSrc === "" ? "AI Image Generator" : "Generated Image"}
@@ -105,7 +108,7 @@ export default function ImageComponent() {
 
       {!error && !imageSrc && (
         <Textarea
-          className="my-4 sm:my-8 bg-transparent max-w-xl"
+          className="my-4 sm:my-8 bg-white max-w-xl"
           placeholder="Write your idea to generate image"
           value={value}
           onChange={(e) => setValue(e.target.value)}
