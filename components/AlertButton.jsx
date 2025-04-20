@@ -1,3 +1,4 @@
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,8 +11,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
 
 export function AlertButton() {
+  const { user } = useUser();
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
