@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 export default function Navbar() {
   const reload = () => {
     window.location.reload();
   };
-
+  const user = useUser();
   return (
     <header className="fixed h-[60px] inset-y-0 w-full flex justify-between items-center z-50 px-6">
       <button
@@ -20,11 +21,15 @@ export default function Navbar() {
           <Image src="/vector.svg" alt="vector" height={15} width={15} />
           Credits left: 3
         </span>
-        <button>
-          <div className="w-10 h-10 rounded-full border bg-red-50 grid place-items-center">
-            NT
-          </div>
-        </button>
+        {user ? (
+          <UserButton />
+        ) : (
+          <button className="cursor-pointer">
+            <div className="w-10 h-10 rounded-full border bg-red-50 grid place-items-center">
+              NT
+            </div>
+          </button>
+        )}
       </div>
     </header>
   );
