@@ -16,9 +16,10 @@ export default function ImageComponent() {
   const [error, setError] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [creditLoading, setCreditLoading] = useState(false);
-  const [credit, setCredit] = useState(0);
+  const [credit, setCredit] = useState(null);
   const [value, setValue] = useState("");
   const { user, isLoaded } = useUser();
+
   const fetchData = async () => {
     try {
       if (!value) {
@@ -63,7 +64,6 @@ export default function ImageComponent() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    window.location.reload();
   };
 
   const fetchCredits = async () => {
@@ -92,36 +92,49 @@ export default function ImageComponent() {
     } catch (error) {
       console.error(error);
       setCredit(null);
-      // Refresh the page if fetching credits fails
-      window.location.reload();
+      setError(true);
+      toast.error("Failed to fetch credits");
     } finally {
       setCreditLoading(false);
     }
   };
 
   const reload = () => {
-    window.location.reload();
+    setError(false);
+    setImageSrc("");
+    setValue("");
   };
 
   useEffect(() => {
-    user && isLoaded === true && fetchCredits();
-  }, [user]);
+    if (user && isLoaded) {
+      fetchCredits();
+    }
+  }, [user, isLoaded]);
+
+  useEffect(() => {
+    if (error && value) {
+      setError(false);
+    }
+  }, [value]);
+
+  const hasCredits = typeof credit === "number" && credit > 0;
+  const creditsLoaded = typeof credit === "number";
 
   return (
     <section className="relative p-4 min-h-screen max-w-screen overflow-x-hidden flex flex-col justify-center items-center bg-gradient-to-b from-yellow-50 to-transparent">
       <Navbar token={credit} isLoading={creditLoading} />
-      {!error && credit === 0 && (
+      {!error && creditsLoaded && credit === 0 && (
         <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
           Buy some credits for more images
         </h1>
       )}
-      {!error && credit !== 0 && (
+      {!error && creditsLoaded && credit > 0 && (
         <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
           {imageSrc === "" ? "AI Image Generator" : "Generated Image"}
         </h1>
       )}
 
-      {!error && !imageSrc && credit !== 0 && (
+      {!error && !imageSrc && creditsLoaded && credit > 0 && (
         <Textarea
           className="my-4 sm:my-8 bg-white max-w-xl"
           placeholder="Write your idea to generate image"
@@ -150,7 +163,7 @@ export default function ImageComponent() {
           />
         )
       )}
-      {credit !== 0 && (
+      {creditsLoaded && credit > 0 && (
         <div className="w-full flex justify-center items-center gap-x-4">
           {imageSrc && (
             <Button
@@ -182,7 +195,7 @@ export default function ImageComponent() {
           )}
         </div>
       )}
-      {credit === 0 && (
+      {creditsLoaded && credit === 0 && (
         <div className="my-4">
           <AlertButton />
         </div>
