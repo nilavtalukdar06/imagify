@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <main className="p-4 h-screen w-screen overflow-hidden flex flex-col justify-center items-center">
+    <main className="p-4 h-screen w-screen overflow-hidden flex flex-col justify-center items-center bg-gradient-to-b from-yellow-50 to-transparent">
       <div className="my-2">
         <ImageComponent />
       </div>
-      <Button variant="outline" className="cursor-pointer">
+      <Button variant="outline" className="cursor-pointer mt-4">
         Generate Image 💫
       </Button>
     </main>
