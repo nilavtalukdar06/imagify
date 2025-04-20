@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "./ui/textarea";
 import { useUser } from "@clerk/nextjs";
+import { AlertButton } from "./AlertButton";
 
 export default function ImageComponent() {
   const [imageSrc, setImageSrc] = useState("");
@@ -174,9 +175,7 @@ export default function ImageComponent() {
           )}
         </div>
       )}
-      {credit === 0 && (
-        <Button className="my-4 cursor-pointer">Buy Credits</Button>
-      )}
+      {credit === 0 && <AlertButton />}
     </section>
   );
 }
