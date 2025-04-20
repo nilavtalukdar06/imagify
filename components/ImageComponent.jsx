@@ -8,10 +8,14 @@ export default function ImageComponent() {
   const [imageSrc, setImageSrc] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const fetchData = async () => {
     try {
       setLoading(true);
+      setDisabled(true);
+      setError(false); // Reset error state
+      setImageSrc(""); // Optionally reset image
       const response = await fetch("/api/generate-image", { method: "GET" });
       const data = await response.json();
       const image = data?.result[0]?.image;
@@ -19,16 +23,18 @@ export default function ImageComponent() {
       setImageSrc(srcImage);
     } catch (error) {
       setError(true);
+      setImageSrc(""); // Optionally clear image on error
       console.error(`Failed to generate image, error: ${error}`);
     } finally {
       setLoading(false);
+      setDisabled(false);
     }
   };
 
   return (
     <section>
       <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
-        Generated Image
+        {imageSrc === "" ? "AI Image Generator" : "Generated Image"}
       </h1>
       {loading ? (
         <div className="w-full flex justify-center items-center">
@@ -54,8 +60,9 @@ export default function ImageComponent() {
           variant="outline"
           className="cursor-pointer my-4"
           onClick={fetchData}
+          disabled={disabled}
         >
-          Generate Image 💫
+          {disabled ? "Generating..." : "Generate Image 💫"}
         </Button>
       </div>
     </section>
