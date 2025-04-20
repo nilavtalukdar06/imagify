@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI, Modality } from "@google/genai";
 
-export async function GET() {
+export async function POST(request) {
+  const text = await request.json();
+  if (!text || !text.prompt) {
+    return NextResponse.json(
+      { message: "prompt is required" },
+      { status: 400 }
+    );
+  }
   async function main() {
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-      const contents = "create an image of a cute puppy";
+      const contents = text.prompt;
       const response = await ai.models.generateContent({
         model: "gemini-2.0-flash-exp-image-generation",
         contents: contents,
@@ -13,6 +20,7 @@ export async function GET() {
           responseModalities: [Modality.TEXT, Modality.IMAGE],
         },
       });
+      console.log(response);
       if (!response.candidates || !response.candidates[0]?.content?.parts) {
         throw new Error("Invalid AI response structure");
       }
@@ -31,5 +39,5 @@ export async function GET() {
   }
 
   const result = await main();
-  return NextResponse.json({ result }, { status: 200 });
+  return NextResponse.json({ result }, { status: 201 });
 }
