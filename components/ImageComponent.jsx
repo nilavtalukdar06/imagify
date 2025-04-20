@@ -4,12 +4,14 @@ import { Download } from "lucide-react";
 import Image from "next/image";
 import Loader from "./Loader";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "./ui/textarea";
 
 export default function ImageComponent() {
   const [imageSrc, setImageSrc] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [value, setValue] = useState("");
 
   const fetchData = async () => {
     try {
@@ -51,6 +53,16 @@ export default function ImageComponent() {
         <h1 className="text-center my-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text">
           {imageSrc === "" ? "AI Image Generator" : "Generated Image"}
         </h1>
+      )}
+
+      {!error && !imageSrc && (
+        <Textarea
+          className="my-4 sm:my-8 bg-transparent"
+          placeholder="Write your idea to generate image"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          disabled={disabled}
+        />
       )}
 
       {loading ? (
