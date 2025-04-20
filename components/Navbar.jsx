@@ -44,11 +44,8 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    if (user?.primaryEmailAddress?.emailAddress && user?.fullName) {
-      createUser();
-    }
-    // Only call createUser when user info is complete
-  }, [user?.primaryEmailAddress?.emailAddress, user?.fullName]);
+    user && createUser();
+  }, [user]);
 
   return (
     <header className="fixed h-[60px] inset-y-0 w-full flex justify-between items-center z-50 px-6">
