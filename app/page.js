@@ -1,5 +1,4 @@
 import ImageComponent from "@/components/ImageComponent";
-import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -7,9 +6,6 @@ export default function Home() {
       <div className="my-2">
         <ImageComponent />
       </div>
-      <Button variant="outline" className="cursor-pointer mt-4">
-        Generate Image 💫
-      </Button>
     </main>
   );
 }
