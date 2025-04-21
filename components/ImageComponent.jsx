@@ -70,6 +70,7 @@ export default function ImageComponent() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    setValue("");
     // Do not reload the page after download
     setImageSrc(""); // Reset image to allow new generation
     fetchCredits(); // Refresh credits after download
