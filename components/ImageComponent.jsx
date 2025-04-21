@@ -102,6 +102,7 @@ export default function ImageComponent() {
       console.error(error);
       setCredit(0); // Set to 0 on error
       toast.error("Failed to fetch credits");
+      window.location.reload();
       // Do not reload the page to avoid infinite loop
     } finally {
       setCreditLoading(false);
