@@ -60,7 +60,7 @@ export default function Navbar({ token, isLoading }) {
           <Image src="/vector.svg" alt="vector" height={15} width={15} />
           {isLoading
             ? "Loading..."
-            : token !== null
+            : token !== undefined
             ? `Credits left: ${token}`
             : "Not found ☠️"}
         </span>
@@ -68,9 +68,13 @@ export default function Navbar({ token, isLoading }) {
           <UserButton />
         ) : (
           <button className="cursor-pointer">
-            <div className="w-10 h-10 rounded-full border bg-red-50 grid place-items-center">
-              NT
-            </div>
+            <Image
+              src="/avatar.jpg"
+              width={30}
+              height={30}
+              className="rounded-full"
+              alt="fallback-image"
+            />
           </button>
         )}
       </div>
