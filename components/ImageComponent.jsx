@@ -44,7 +44,7 @@ export default function ImageComponent() {
         throw new Error("Failed to generate image");
       }
       const data = await response.json();
-      const image = data?.result?.[0]?.image;
+      const image = data?.result?.[1]?.image;
       if (!image) {
         throw new Error("No image returned from API");
       }
